@@ -1,0 +1,9 @@
+Jonesy,Ninja,100
+Peely Construtor,Banana,80
+Midas,Out Lander,90
+Jonesy,Soldier,70
+Drift,Commando,85
+Midas,Comandante,332
+Andrade,Legendario,23
+Drift,Vasco,43
+Vasco,Gigante,2239
