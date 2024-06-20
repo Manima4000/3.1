@@ -29,8 +29,9 @@ protected:
 
     void setPontuacao2(int k) { pontuacao2 = k; }
 
-    void contaSeq4Horizontal(char c)
-    { // Caso de sequencia na horizontal
+    void VerificaPontuacao(char c)
+    {
+        // Caso de sequencia na horizontal
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n - 3; j++)
@@ -44,10 +45,7 @@ protected:
                 }
             }
         }
-    }
 
-    void contaSeq4Vertical(char c)
-    { // Caso de sequencia na vertical
         for (int j = 0; j < n; j++)
         {
             for (int i = 0; i < m - 3; i++)
@@ -61,11 +59,8 @@ protected:
                 }
             }
         }
-    }
 
-    void contaDiagonal1(char c)
-    { // Caso de sequencia numa diagonal descendente
-        for (int i = 0; i < m - 3; i++)
+         for (int i = 0; i < m - 3; i++)
         {
             for (int j = 0; j < n - 3; j++)
             {
@@ -78,10 +73,7 @@ protected:
                 }
             }
         }
-    }
 
-    void contaDiagonal2(char c)
-    { // Caso de sequencia numa diagonal ascendente
         for (int i = 3; i < m; i++)
         {
             for (int j = 0; j < n - 3; j++)
@@ -216,14 +208,8 @@ public:
         if (contador == m * n)
         {
             cout << "O jogo terminou !!" << endl;
-            contaSeq4Horizontal('X');
-            contaSeq4Horizontal('O');
-            contaSeq4Vertical('X');
-            contaSeq4Vertical('O');
-            contaDiagonal1('X');
-            contaDiagonal1('O');
-            contaDiagonal2('X');
-            contaDiagonal2('O');
+            VerificaPontuacao('X');
+            VerificaPontuacao('O');
             cout << "Pontuacao do Jogador1: " << getPontuacao1() << endl;
             cout << "Pontuacao do Jogador2: " << getPontuacao2() << endl;
             return true;
@@ -278,14 +264,8 @@ public:
                     contador++;
             }
         }
-        contaSeq4Horizontal('X');
-        contaSeq4Horizontal('O');
-        contaSeq4Vertical('X');
-        contaSeq4Vertical('O');
-        contaDiagonal1('X');
-        contaDiagonal1('O');
-        contaDiagonal2('X');
-        contaDiagonal2('O');
+        VerificaPontuacao('X');
+        VerificaPontuacao('O');
         if (getPontuacao1() == 1){
             cout << "Jogador 1 venceu !!" << endl;
             return Vitoria_Jogador_1;
