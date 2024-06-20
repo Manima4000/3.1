@@ -1,6 +1,17 @@
+//Alunos: Matheus ANDRADE Pinto Ferreira
+//Aluno: Gabriel Caninde de Medeiros (Reserva)
 #include <bits/stdc++.h>
 #include <unistd.h>
 using namespace std;
+
+/*Alterações do código da VE:
+Só havia 1 comentário negativo e foi arrumado. Unimos as funções de de contagem da classe
+Implementamos o enum Resultado_atual
+Fizemos alteração no método gerenciar para jogar apenas os 2 bots, sendo o primeiro bot inteligente
+Criação de metodos para implementação do algoritmo MiniMax para garantir a vitoria do bot 1.
+Fizemos o método fimDeJogo retornar variáveis do enum
+Modificação na função main(): implementamos um loop que só é quebrado com vitoria do bot 2.
+*/
 
 enum Resultado_atual { Continua, Vitoria_Jogador_1, Vitoria_Jogador_2, Empate };
 
