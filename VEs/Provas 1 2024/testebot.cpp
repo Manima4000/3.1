@@ -2,16 +2,22 @@
 //Aluno: Gabriel Caninde de Medeiros (Reserva)
 #include <bits/stdc++.h>
 #include <unistd.h>
+
 using namespace std;
 
 /*Alterações do código da VE:
-Só havia 1 comentário negativo e foi arrumado. Unimos as funções de de contagem da classe
-Implementamos o enum Resultado_atual
-Fizemos alteração no método gerenciar para jogar apenas os 2 bots, sendo o primeiro bot inteligente
+
+Só havia 1 comentário negativo e foi arrumado. Unimos as funções de de contagem da classe.
+Implementamos o enum Resultado_atual.
+Fizemos alteração no método gerenciar para jogar apenas os 2 bots, sendo o primeiro bot inteligente.
 Criação de metodos para implementação do algoritmo MiniMax para garantir a vitoria do bot 1.
-Fizemos o método fimDeJogo retornar variáveis do enum
+Fizemos o método fimDeJogo retornar variáveis do enum.
 Modificação na função main(): implementamos um loop que só é quebrado com vitoria do bot 2.
+Na função gerenciar tem o delay em comentario, caso o queira adionar delay entre as jogadas, basta descomentar o codigo.
+
 */
+
+float delay = 1;
 
 enum Resultado_atual { Continua, Vitoria_Jogador_1, Vitoria_Jogador_2, Empate };
 
@@ -175,6 +181,7 @@ public:
     }
 
     void gerenciar() {
+        //sleep(delay); // Caso queira adicionar delay
         srand(time(0));  // Inicializa a semente do gerador de números aleatórios
         exibir();
         while (fimDeJogo() == Continua) {
@@ -201,7 +208,6 @@ public:
         } else {
             cout << "Empate" << endl;
         }
-        resetarTabuleiro();
     }
 
     void resetarTabuleiro() {
@@ -216,7 +222,7 @@ public:
     }
 
     int melhorJogada(int profundidade);
-    int minimax(int profundidade, bool isMaximizingPlayer);
+    int minimax(int profundidade, bool isMaximizingPlayer, int alpha, int beta);
     int avaliar();
 };
 
@@ -226,15 +232,27 @@ public:
 };
 
 int Lig4::avaliar() {
+    int score = 0;
+
+    // Centralidade
+    for (int i = 0; i < m; i++) {
+        if (tab[i][n / 2] == 'X') score += 3;
+        if (tab[i][n / 2] == 'O') score -= 3;
+    }
+
+    // Adicionar aqui outras heurísticas de pontuação para sequências parciais
+
     VerificaPontuacao('X');
     VerificaPontuacao('O');
-    int score = getPontuacao1() - getPontuacao2();
+    score += 1000 * getPontuacao1();
+    score -= 1000 * getPontuacao2();
     setPontuacao1(0);
     setPontuacao2(0);
+
     return score;
 }
 
-int Lig4::minimax(int profundidade, bool isMaximizingPlayer) {
+int Lig4::minimax(int profundidade, bool isMaximizingPlayer, int alpha, int beta) {
     Resultado_atual resultado = fimDeJogo();
     if (resultado != Continua || profundidade == 0) {
         return avaliar();
@@ -245,9 +263,13 @@ int Lig4::minimax(int profundidade, bool isMaximizingPlayer) {
         for (int col = 0; col < n; col++) {
             if (jogadaValida(col)) {
                 jogar(col);
-                int eval = minimax(profundidade - 1, false);
+                int eval = minimax(profundidade - 1, false, alpha, beta);
                 desfazerJogada(col);
                 maxEval = max(maxEval, eval);
+                alpha = max(alpha, eval);
+                if (beta <= alpha) {
+                    break;  // Poda beta
+                }
             }
         }
         return maxEval;
@@ -256,9 +278,13 @@ int Lig4::minimax(int profundidade, bool isMaximizingPlayer) {
         for (int col = 0; col < n; col++) {
             if (jogadaValida(col)) {
                 jogar(col);
-                int eval = minimax(profundidade - 1, true);
+                int eval = minimax(profundidade - 1, true, alpha, beta);
                 desfazerJogada(col);
                 minEval = min(minEval, eval);
+                beta = min(beta, eval);
+                if (beta <= alpha) {
+                    break;  // Poda alfa
+                }
             }
         }
         return minEval;
@@ -272,7 +298,7 @@ int Lig4::melhorJogada(int profundidade) {
     for (int col = 0; col < n; col++) {
         if (jogadaValida(col)) {
             jogar(col);
-            int moveValue = minimax(profundidade - 1, false);
+            int moveValue = minimax(profundidade - 1, false, INT_MIN, INT_MAX);
             desfazerJogada(col);
 
             if (moveValue > melhorValor) {
@@ -283,7 +309,6 @@ int Lig4::melhorJogada(int profundidade) {
     }
     return melhorColuna;
 }
-
 
 int main() {
     int partidas_jogadas = 0;
